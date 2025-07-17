@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gautham T R | ECE Student & Coder</title>
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --text-light: #E0E0E0;
+            --text-white: #FFFFFF;
+            --accent-teal: #00FFAA;
+            --card-gray: #1E1E1E;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--text-white);
+            text-align: center;
+            padding: 4rem 0;
+        }
+        h1, h2, h3 {
+            color: var(--accent-teal);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        section {
+            margin-bottom: 3rem;
+        }
+        .card {
+            background-color: var(--card-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .skill {
+            background-color: rgba(0, 255, 170, 0.1);
+            color: var(--accent-teal);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            background-color: #0a0a0a;
+        }
+        a {
+            color: var(--accent-teal);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header / Hero Section -->
+    <header>
+        <div class="container">
+            <h1>Gautham Thandyakkal Rakesh</h1>
+            <p class="subtitle">Electronics & Communication Engineering | SRM University</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- About Me -->
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="card">
+                <p>
+                    I'm a 2nd-year ECE student at SRM University with a passion for coding and technology. 
+                    Proficient in <strong>Python</strong>, <strong>Java</strong>, <strong>C</strong>, and <strong>JavaScript</strong>, 
+                    I enjoy bridging hardware and software through electronics projects. 
+                    When I'm not debugging circuits or writing code, you'll find me exploring new tech trends.
+                </p>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section id="skills">
+            <h2>Skills</h2>
+            <div class="card">
+                <div class="skills-list">
+                    <span class="skill">Python</span>
+                    <span class="skill">Java</span>
+                    <span class="skill">C</span>
+                    <span class="skill">JavaScript</span>
+                    <span class="skill">Electronics</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resume -->
+        <section id="resume">
+            <h2>Education</h2>
+            <div class="card">
+                <h3>SRM University</h3>
+                <p>B.Tech in Electronics & Communication Engineering (2024-2028)</p>
+                <p>Relevant coursework: Digital Systems, Microprocessors, Data Structures</p>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact">
+            <h2>Get In Touch</h2>
+            <div class="card">
+                <p>
+                    📧 <a href="mailto:gaujan23@gmail.com">gaujan23@gmail.com</a><br>
+                    📸 <a href="https://instagram.com/gauthyyy" target="_blank">Instagram @gauthyyy</a>
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2024 Gautham T R. Built with pure HTML/CSS.</p>
+        </div>
+    </footer>
+</body>
+</html>
