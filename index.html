@@ -39,15 +39,13 @@
             padding: 0;
             line-height: 1.6;
             overflow-x: hidden;
-            cursor: none; /* Hide default cursor */
-        }
-
-        /* Hide default cursor on all interactive elements too */
-        a, button, .skill, .card, .theme-toggle, .nav-toggle {
             cursor: none;
         }
 
-        /* New Background Design */
+        a, button, .skill, .card, .theme-toggle, .nav-toggle, .pdf-link {
+            cursor: none;
+        }
+
         .background-design {
             position: fixed;
             top: 0;
@@ -105,13 +103,13 @@
 
         .custom-cursor {
             position: fixed;
-            width: 20px; /* Restored to previous size */
-            height: 20px; /* Restored to previous size */
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             background-color: var(--accent-teal);
             mix-blend-mode: difference;
             pointer-events: none;
-            z-index: 9999; /* Ensure it stays on top */
+            z-index: 9999;
             transition: transform 0.15s ease, background-color 0.3s ease;
             left: 0;
             top: 0;
@@ -212,6 +210,33 @@
             border: 1px solid var(--accent-teal);
         }
 
+        /* PDF Link Styles */
+        .pdf-link {
+            display: inline-block;
+            background: linear-gradient(45deg, rgba(0, 255, 170, 0.1), rgba(138, 43, 226, 0.1));
+            color: var(--accent-teal);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid var(--accent-teal);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .pdf-link:hover {
+            background: linear-gradient(45deg, rgba(0, 255, 170, 0.2), rgba(138, 43, 226, 0.2));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 170, 0.3);
+        }
+
+        .pdf-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-teal);
+        }
+
         footer {
             text-align: center;
             padding: 3rem 0;
@@ -260,7 +285,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: none; /* Hide default cursor */
+            cursor: none;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: all 0.3s ease;
@@ -284,7 +309,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: none; /* Hide default cursor */
+            cursor: none;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
@@ -412,6 +437,7 @@
         <ul>
             <li><a href="#about" class="nav-link">About</a></li>
             <li><a href="#skills" class="nav-link">Skills</a></li>
+            <li><a href="#assignments" class="nav-link">Assignments</a></li>
             <li><a href="#resume" class="nav-link">Education</a></li>
             <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
@@ -455,6 +481,21 @@
             </div>
         </section>
 
+        <!-- Assignments -->
+        <section id="assignments">
+            <h2>Assignments & Projects</h2>
+            <div class="card">
+                <h3>EMTI Case Study & Simulation Simulation</h3>
+                <p>This is my EMTI Case Study & Simulation Assignment</p>
+                <a href="https://drive.google.com/file/d/1nMv3Xfqc9tfEIZ7ThVUKisRM1aYKpNl0/view?usp=sharing" target="_blank" class="pdf-link">
+                    📄 View Assignment PDF
+                </a>
+                <div class="pdf-preview">
+                    <p><small>Click the link above to view or download the full PDF document</small></p>
+                </div>
+            </div>
+        </section>
+
         <!-- Resume -->
         <section id="resume">
             <h2>Education</h2>
@@ -480,7 +521,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>© 2025 Gautham T R. Built with pure HTML/CSS/JS.</p>
+            <p>© 2024 Gautham T R. Built with pure HTML/CSS/JS.</p>
         </div>
     </footer>
 
@@ -489,19 +530,19 @@
         const cursor = document.querySelector('.custom-cursor');
 
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX - 10 + 'px'; // Adjusted for 20px size
-            cursor.style.top = e.clientY - 10 + 'px'; // Adjusted for 20px size
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
         });
 
-        document.querySelectorAll('a, button, .skill, .card, .theme-toggle, .nav-toggle').forEach(item => {
+        document.querySelectorAll('a, button, .skill, .card, .theme-toggle, .nav-toggle, .pdf-link').forEach(item => {
             item.addEventListener('mouseenter', () => {
                 cursor.style.transform = 'scale(1.8)';
-                cursor.style.backgroundColor = '#8A2BE2'; // Purple on hover
+                cursor.style.backgroundColor = '#8A2BE2';
             });
             
             item.addEventListener('mouseleave', () => {
                 cursor.style.transform = 'scale(1)';
-                cursor.style.backgroundColor = '#00FFAA'; // Teal by default
+                cursor.style.backgroundColor = '#00FFAA';
             });
         });
 
@@ -517,7 +558,7 @@
                     const targetPosition = targetElement.offsetTop - 80;
                     const startPosition = window.pageYOffset;
                     const distance = targetPosition - startPosition;
-                    const duration = 1000; // ms
+                    const duration = 1000;
                     let start = null;
                     
                     window.requestAnimationFrame(step);
@@ -526,7 +567,6 @@
                         if (!start) start = timestamp;
                         const progress = timestamp - start;
                         
-                        // Easing function for smooth acceleration/deceleration
                         window.scrollTo(0, easeInOutCubic(progress, startPosition, distance, duration));
                         
                         if (progress < duration) {
@@ -534,14 +574,12 @@
                         }
                     }
                     
-                    // Close mobile menu if open
                     document.querySelector('nav ul').classList.remove('active');
                     document.querySelector('.nav-toggle').classList.remove('active');
                 }
             });
         });
 
-        // Easing function for smooth scrolling
         function easeInOutCubic(t, b, c, d) {
             t /= d/2;
             if (t < 1) return c/2*t*t*t + b;
@@ -606,7 +644,6 @@
             setTimeout(type, typingSpeed);
         }
 
-        // Start typing animation after a short delay
         setTimeout(type, 1000);
 
         // Theme toggle
