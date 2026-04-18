@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gautham Rakesh | ECE Student & Coder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --text-white: #ffffff;
+            --accent-primary: #00FFAA;
+            --accent-secondary: #8A2BE2;
+            --card-bg: rgba(20, 20, 20, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="light"] {
+            --bg-dark: #fafafa;
+            --text-light: #444444;
+            --text-white: #111111;
+            --card-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: none;
+            transition: background-color 0.5s ease;
+        }
+
+        /* --- Scroll Progress Bar --- */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s ease-out;
+            box-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        /* --- Animated Aurora Background --- */
+        .aurora-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+
+        .aurora-blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.4;
+            border-radius: 50%;
+            transition: transform 0.5s cubic-bezier(0.1, 0.5, 0.1, 1);
+        }
+
+        .blob-1 {
+            width: 40vw; height: 40vw;
+            background: radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%);
+            top: -10%; left: -10%;
+        }
+
+        .blob-2 {
+            width: 35vw; height: 35vw;
+            background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
+            bottom: -10%; right: -10%;
+        }
+
+        /* --- Original Custom Cursor --- */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--accent-primary);
+            mix-blend-mode: difference;
+            pointer-events: none;
+            z-index: 99999;
+            transition: transform 0.15s ease, background-color 0.3s ease;
+            left: 0; top: 0;
+            transform: translate(-50%, -50%);
+        }
+
+        /* --- Typography & Layout --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1, h2, h3 { color: var(--text-white); font-weight: 700; }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-white) 30%, var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -5px;
+            width: 40%; height: 3px;
+            background: var(--accent-primary);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        section:hover h2::after { width: 100%; }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.8;
+        }
+
+        /* --- Spotlight Glassmorphism Cards --- */
+        section {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            overflow: hidden;
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(255, 255, 255, 0.08), transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before { opacity: 1; }
+        .card:hover {
+            transform: translateY(-5px) scale(1.01);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .card > * { position: relative; z-index: 1; }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1.5rem 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, var(--bg-dark) 0%, transparent 100%);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s, transform 0.2s;
+            cursor: none;
+            display: inline-block;
+        }
+
+        nav a:hover { color: var(--text-white); transform: translateY(-2px); }
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 2px;
+            bottom: -4px; left: 0;
+            background-color: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+        nav a:hover::after { width: 100%; }
+
+        /* --- Header --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 4rem;
+        }
+
+        .typed-text-wrapper {
+            margin-top: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--accent-secondary);
+            height: 2rem;
+        }
+
+        .cursor-blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* --- Skills & Projects --- */
+        .skills-list { display: flex; flex-wrap: wrap; gap: 12px; }
+
+        /* FIXED: Faster, hardware-accelerated hover animation */
+        .skill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: transform 0.2s ease-out, background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            will-change: transform;
+            cursor: none;
+        }
+
+        .skill:hover {
+            background: var(--accent-primary);
+            color: #000;
+            border-color: var(--accent-primary);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 5px 15px rgba(0, 255, 170, 0.3);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        @media(min-width: 768px) { .project-grid { grid-template-columns: 1fr 1fr; } }
+
+        .project-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--glass-border);
+            transition: border-color 0.3s;
+            cursor: none;
+        }
+        
+        .project-card:hover { border-color: var(--accent-secondary); }
+
+        .project-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            color: var(--accent-primary);
+        }
+
+        /* --- PDFs & Links --- */
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent-primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            cursor: none;
+        }
+
+        .pdf-link:hover {
+            background: var(--accent-primary);
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 255, 170, 0.3);
+        }
+
+        #contact a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            position: relative;
+            cursor: none;
+            transition: color 0.3s;
+        }
+        
+        #contact a::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 2px;
+            bottom: -2px; left: 0;
+            background-color: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+        #contact a:hover { color: var(--accent-secondary); }
+        #contact a:hover::after { width: 100%; background-color: var(--accent-secondary); }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* --- Theme Toggle --- */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px; right: 30px;
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            z-index: 1000;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: none;
+        }
+
+        .theme-toggle:hover { transform: scale(1.2) rotate(15deg); }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .custom-cursor { display: none; }
+            body, a, .theme-toggle, .skill, .pdf-link { cursor: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="scroll-progress"></div>
+
+    <div class="aurora-bg">
+        <div class="aurora-blob blob-1" id="blob-1"></div>
+        <div class="aurora-blob blob-2" id="blob-2"></div>
+    </div>
+
+    <div class="custom-cursor" id="cursor"></div>
+
+    <div class="theme-toggle" id="theme-btn">🌓</div>
+
+    <nav>
+        <ul>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#skills" class="nav-link">Skills</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#assignments" class="nav-link">Certifications</a></li>
+            <li><a href="#education" class="nav-link">Education</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header id="home">
+        <div class="container">
+            <h1>Gautham Rakesh</h1>
+            <p class="subtitle">Electronics & Communication Engineering | SRM University</p>
+            <div class="typed-text-wrapper">
+                <span id="typed-text"></span><span class="cursor-blink">|</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="card spotlight-card">
+                <p>
+                    I'm a 2nd-year ECE student at SRM University with a passion for coding and technology. 
+                    Proficient in <strong>Python</strong>, <strong>Java</strong>, <strong>C</strong>, and <strong>JavaScript</strong>, 
+                    I enjoy bridging hardware and software through electronics projects. 
+                    When I'm not debugging circuits or writing code, you'll find me exploring new tech trends.
+                </p>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2>Skills</h2>
+            <div class="card spotlight-card">
+                <div class="skills-list">
+                    <span class="skill">Python</span>
+                    <span class="skill">Java</span>
+                    <span class="skill">C</span>
+                    <span class="skill">JavaScript</span>
+                    <span class="skill">Electronics</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2>Featured Projects</h2>
+            <div class="card spotlight-card">
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h3>Snap-Spec App</h3>
+                        <p>An AI-powered mobile application utilizing computer vision to instantly identify electronic components and retrieve their specific technical specifications.</p>
+                    </div>
+                    <div class="project-card">
+                        <h3>IoT Environment Monitor</h3>
+                        <p>A hardware-software bridge using C and Python to read real-time sensor data from microcontrollers and display analytics on a web dashboard.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="assignments">
+            <h2>Assignments & Certifications</h2>
+            
+            <div class="card spotlight-card" style="margin-bottom: 2rem;">
+                <h3 style="color: var(--accent-secondary); margin-bottom: 0.5rem;">Electromagnetic Theory (EMTI) Assignment</h3>
+                <p>This assignment demonstrates my understanding of electromagnetic fields, encompassing problem-solving approaches for Maxwell's equations and wave propagation analysis.</p>
+                <a href="https://drive.google.com/file/d/1nMv3Xfqc9tfEIZ7ThVUKisRM1aYKpNl0/view?usp=sharing" target="_blank" class="pdf-link">
+                    📄 View EMTI Assignment
+                </a>
+            </div>
+
+            <div class="card spotlight-card">
+                <h3 style="color: var(--accent-secondary); margin-bottom: 0.5rem;">Employability Skills Certificate</h3>
+                <p>Official certification demonstrating proficiency in core professional workplace skills and career readiness.</p>
+                <a href="https://drive.google.com/file/d/1keIbkst22pP7Y0rWiBxSnIYwlR56MVnl/view?usp=sharing" target="_blank" class="pdf-link">
+                    📄 View Certificate
+                </a>
+            </div>
+        </section>
+
+        <section id="education">
+            <h2>Education</h2>
+            <div class="card spotlight-card">
+                <h3 style="color: var(--accent-secondary); margin-bottom: 0.5rem;">SRM University</h3>
+                <p>B.Tech in Electronics & Communication Engineering (2024-2028)</p>
+                <p style="opacity: 0.7; margin-top: 0.5rem;">
+                    Relevant coursework: Digital Systems, Microprocessors, Data Structures
+                </p>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Get In Touch</h2>
+            <div class="card spotlight-card">
+                <p style="font-size: 1.1rem; line-height: 2;">
+                    📧 <a href="mailto:gaujan23@gmail.com">gaujan23@gmail.com</a><br>
+                    📸 <a href="https://instagram.com/gauthyyy" target="_blank">Instagram @gauthyyy</a>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Gautham Rakesh. Built with pure HTML/CSS/JS.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Original Custom Cursor Logic ---
+        const cursor = document.getElementById('cursor');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button, .skill, .theme-toggle, .pdf-link, .project-card').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.8)';
+                cursor.style.backgroundColor = 'var(--accent-secondary)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.backgroundColor = 'var(--accent-primary)';
+            });
+        });
+
+        // --- Original Smooth Scrolling (Fixed) ---
+        document.querySelectorAll('.nav-link').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    // Offset by 100 to clear the fixed navigation bar
+                    const targetPosition = targetElement.offsetTop - 100;
+                    const startPosition = window.pageYOffset;
+                    const distance = targetPosition - startPosition;
+                    const duration = 1000;
+                    let start = null;
+                    
+                    window.requestAnimationFrame(step);
+                    
+                    function step(timestamp) {
+                        if (!start) start = timestamp;
+                        const progress = timestamp - start;
+                        
+                        window.scrollTo(0, easeInOutCubic(progress, startPosition, distance, duration));
+                        
+                        if (progress < duration) {
+                            window.requestAnimationFrame(step);
+                        }
+                    }
+                }
+            });
+        });
+
+        function easeInOutCubic(t, b, c, d) {
+            t /= d/2;
+            if (t < 1) return c/2*t*t*t + b;
+            t -= 2;
+            return c/2*(t*t*t + 2) + b;
+        }
+
+        // --- Spotlight Effect on Cards ---
+        document.querySelectorAll('.spotlight-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // --- Scroll Progress Bar & Parallax ---
+        const scrollProgress = document.getElementById('scroll-progress');
+        const blob1 = document.getElementById('blob-1');
+        const blob2 = document.getElementById('blob-2');
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            scrollProgress.style.width = scrolled + '%';
+
+            blob1.style.transform = `translateY(${winScroll * 0.1}px) translateX(${winScroll * -0.05}px)`;
+            blob2.style.transform = `translateY(${winScroll * -0.1}px) translateX(${winScroll * 0.05}px)`;
+        });
+
+        // --- Typing Effect ---
+        const typedTextSpan = document.getElementById("typed-text");
+        const textArray = ["Python Developer", "ECE Student", "Tech Enthusiast", "Problem Solver"];
+        const typingDelay = 100;
+        const erasingDelay = 50;
+        const newTextDelay = 2000;
+        let textArrayIndex = 0;
+        let charIndex = 0;
+
+        function type() {
+            if (charIndex < textArray[textArrayIndex].length) {
+                typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, typingDelay);
+            } else {
+                setTimeout(erase, newTextDelay);
+            }
+        }
+
+        function erase() {
+            if (charIndex > 0) {
+                typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, erasingDelay);
+            } else {
+                textArrayIndex++;
+                if (textArrayIndex >= textArray.length) textArrayIndex = 0;
+                setTimeout(type, typingDelay + 1100);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => setTimeout(type, newTextDelay));
+
+        // --- Scroll Reveal Animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // --- Theme Toggle ---
+        const themeBtn = document.getElementById('theme-btn');
+        themeBtn.addEventListener('click', () => {
+            const body = document.body;
+            if(body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+            } else {
+                body.setAttribute('data-theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>
